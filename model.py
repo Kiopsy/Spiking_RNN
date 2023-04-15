@@ -1,68 +1,67 @@
 import nest
 import numpy as np
 
-print('test')
-# # Network parameters
-# num_excitatory = 432
-# num_inhibitory = 108
-# num_neurons = num_excitatory + num_inhibitory
-# neuron_model = "iaf_psc_alpha"
+# Network parameters
+num_excitatory = 432
+num_inhibitory = 108
+num_neurons = num_excitatory + num_inhibitory
+neuron_model = "iaf_psc_alpha"
 
-# # Synaptic parameters
-# tau_syn_exc = 0.5  # Excitatory synaptic time constant in ms
-# tau_syn_inh = 0.5  # Inhibitory synaptic time constant in ms
-# w_exc = 1.0  # Excitatory synaptic weight
-# w_inh = -5.0  # Inhibitory synaptic weight
+# Synaptic parameters
+tau_syn_exc = 0.5  # Excitatory synaptic time constant in ms
+tau_syn_inh = 0.5  # Inhibitory synaptic time constant in ms
+w_exc = 1.0  # Excitatory synaptic weight
+w_inh = -5.0  # Inhibitory synaptic weight
 
-# # STDP parameters
-# tau_plus = 16.8  # ms
-# tau_minus = 33.7  # ms
-# A_plus = 0.1
-# A_minus = 0.12
-# Wmax = 3.0
+# STDP parameters
+tau_plus = 16.8  # ms
+tau_minus = 33.7  # ms
+A_plus = 0.1
+A_minus = 0.12
+Wmax = 3.0
 
-# nest.ResetKernel()
-# nest.set_verbosity("M_WARNING")
+nest.ResetKernel()
+nest.set_verbosity("M_WARNING")
 
-# # Set the simulation time resolution to 0.1 ms
-# nest.SetKernelStatus({"resolution": 1})
+# Set the simulation time resolution to 0.1 ms
+nest.SetKernelStatus({"resolution": 1})
 
-# # Create neurons
-# neurons = nest.Create(neuron_model, num_neurons)
+# Create neurons
+neurons = nest.Create(neuron_model, num_neurons)
 
-# excitatory_neurons = neurons[:num_excitatory]
-# inhibitory_neurons = neurons[num_excitatory:]
+excitatory_neurons = neurons[:num_excitatory]
+inhibitory_neurons = neurons[num_excitatory:]
 
-# # Set the parameters for excitatory and inhibitory neurons
-# nest.SetStatus(excitatory_neurons, {"tau_syn_ex": tau_syn_exc, "tau_syn_in": tau_syn_inh})
-# nest.SetStatus(inhibitory_neurons, {"tau_syn_ex": tau_syn_exc, "tau_syn_in": tau_syn_inh})
+# Set the parameters for excitatory and inhibitory neurons
+nest.SetStatus(excitatory_neurons, {"tau_syn_ex": tau_syn_exc, "tau_syn_in": tau_syn_inh})
+nest.SetStatus(inhibitory_neurons, {"tau_syn_ex": tau_syn_exc, "tau_syn_in": tau_syn_inh})
 
-# # Create STDP synapse model
-# stdp_triplet_synapse = nest.CopyModel(
-#     "stdp_triplet_synapse",
-#     "stdp_triplet_synapse_exc",
-#     {
-#         "A_plus": A_plus,
-#         "A_minus": A_minus,
-#         "tau_plus": tau_plus,
-#         "tau_minus": tau_minus,
-#         "Wmax": Wmax,
-#     },
-# )
+# Create STDP synapse model
+stdp_triplet_synapse = nest.CopyModel(
+    "stdp_triplet_synapse",
+    "stdp_triplet_synapse_exc",
+    {
+        "A_plus": A_plus,
+        "A_minus": A_minus,
+        "tau_plus": tau_plus,
+        "tau_minus": tau_minus,
+        "Wmax": Wmax,
+    },
+)
 
-# # Connect neurons with STDP synapses
-# conn_dict = {"rule": "all_to_all"}
+# Connect neurons with STDP synapses
+conn_dict = {"rule": "all_to_all"}
 
-# syn_dict_exc = {"model": "stdp_triplet_synapse_exc", "weight": w_exc, "delay": 1.0}
-# nest.Connect(excitatory_neurons, neurons, conn_dict, syn_dict_exc)
+syn_dict_exc = {"model": "stdp_triplet_synapse_exc", "weight": w_exc, "delay": 1.0}
+nest.Connect(excitatory_neurons, neurons, conn_dict, syn_dict_exc)
 
-# # Connect neurons with static inhibitory synapses
-# syn_dict_inh = {"weight": w_inh, "delay": 1.0}
-# nest.Connect(inhibitory_neurons, neurons, conn_dict, syn_dict_inh)
+# Connect neurons with static inhibitory synapses
+syn_dict_inh = {"weight": w_inh, "delay": 1.0}
+nest.Connect(inhibitory_neurons, neurons, conn_dict, syn_dict_inh)
 
-# # Simulate the network
-# sim_time = 1000.0  # Simulation time in ms
-# nest.Simulate(sim_time)
+# Simulate the network
+sim_time = 1000.0  # Simulation time in ms
+nest.Simulate(sim_time)
 
 
 # RNN class
